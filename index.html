@@ -9,9 +9,7 @@
             href="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
             type="image/svg+xml"
         />
-    </head>
-    <body>
-        <style type="text/css" media="all">
+        <style>
             * {
                 margin: 0;
                 padding: 0;
@@ -77,26 +75,17 @@
             .wa-name {
                 font-size: 16px;
                 font-weight: 500;
-                color: #fff;
                 margin-bottom: 2px;
             }
 
             .wa-status {
                 font-size: 13px;
-                color: rgba(255, 255, 255, 0.9);
-                font-weight: 400;
+                opacity: 0.9;
             }
 
             .wa-chat {
-                padding: 20px 12px;
+                padding: 20px 12px 140px;
                 background: #efeae2;
-                background-image: repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 35px,
-                    rgba(255, 255, 255, 0.03) 35px,
-                    rgba(255, 255, 255, 0.03) 70px
-                );
                 min-height: 320px;
                 display: flex;
                 flex-direction: column;
@@ -111,12 +100,11 @@
                 font-size: 14.2px;
                 line-height: 19px;
                 position: relative;
-                word-wrap: break-word;
                 box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
             }
 
             .bubble.left {
-                background: #ffffff;
+                background: #fff;
                 border-top-left-radius: 0;
                 align-self: flex-start;
             }
@@ -126,16 +114,14 @@
                 position: absolute;
                 left: -8px;
                 top: 0;
-                width: 0;
-                height: 0;
                 border-style: solid;
                 border-width: 0 8px 13px 0;
-                border-color: transparent #ffffff transparent transparent;
+                border-color: transparent #fff transparent transparent;
             }
 
             .bubble-time {
                 font-size: 11px;
-                color: rgba(0, 0, 0, 0.45);
+                opacity: 0.45;
                 margin-top: 4px;
                 text-align: right;
                 display: block;
@@ -144,72 +130,61 @@
             .bubble.image {
                 padding: 0;
                 background: transparent;
-                box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-                overflow: hidden;
                 max-width: 260px;
-            }
-
-            .bubble.image::before {
-                content: "";
-                position: absolute;
-                left: -8px;
-                top: 0;
-                width: 0;
-                height: 0;
-                border-style: solid;
-                border-width: 0 8px 13px 0;
-                border-color: transparent #ffffff transparent transparent;
-                z-index: 1;
             }
 
             .bubble-image {
                 width: 100%;
-                height: auto;
-                display: block;
-                background: #f0f0f0;
-                aspect-ratio: 1 / 1;
+                aspect-ratio: 1/1;
                 object-fit: cover;
+                display: block;
             }
 
             .bubble-caption {
-                background: #ffffff;
+                background: #fff;
                 padding: 6px 7px 8px 9px;
-                font-size: 14.2px;
-                line-height: 19px;
             }
 
-            #waBtn {
-                width: calc(100% - 32px);
-                margin: 16px;
-                padding: 12px 24px;
+            /* ===== FLOATING WHATSAPP BUTTON ===== */
+            .floating-wa {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: calc(100% - 40px);
+                max-width: 420px;
+                z-index: 9999;
+
+                padding: 14px 24px;
                 background: #25d366;
                 color: #fff;
                 border: none;
-                border-radius: 24px;
+                border-radius: 30px;
+
                 font-size: 15px;
-                font-weight: 500;
+                font-weight: 600;
                 cursor: pointer;
-                box-shadow: 0 2px 5px rgba(37, 211, 102, 0.3);
-                transition: all 0.2s ease;
-                font-family: inherit;
-                letter-spacing: 0.3px;
+
+                box-shadow: 0 8px 20px rgba(37, 211, 102, 0.45);
+                transition: 0.2s ease;
+                animation: floatIn 0.4s ease;
             }
 
-            #waBtn:hover:not(:disabled) {
-                background: #20ba5a;
-                box-shadow: 0 3px 8px rgba(37, 211, 102, 0.4);
-                transform: translateY(-1px);
-            }
-
-            #waBtn:active:not(:disabled) {
-                transform: translateY(0);
-                box-shadow: 0 1px 3px rgba(37, 211, 102, 0.3);
-            }
-
-            #waBtn:disabled {
-                background: #a8dbba;
+            .floating-wa:disabled {
+                background: #9fd9b5;
                 cursor: not-allowed;
                 box-shadow: none;
+            }
+
+            @keyframes floatIn {
+                from {
+                    transform: translateX(-50%) translateY(80px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                }
             }
 
             @media (max-width: 480px) {
@@ -220,20 +195,37 @@
                 .wa-card {
                     border-radius: 0;
                     min-height: 100vh;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .wa-chat {
-                    flex: 1;
                 }
             }
-        </style>
 
+            /* === FLOATING BUTTON ANIMATION === */
+            @keyframes smoothPulse {
+                0% {
+                    transform: translateX(-50%) scale(1);
+                }
+                50% {
+                    transform: translateX(-50%) scale(1.04);
+                }
+                100% {
+                    transform: translateX(-50%) scale(1);
+                }
+            }
+
+            .floating-wa {
+                animation: smoothPulse 1.8s ease-in-out infinite;
+            }
+
+            .floating-wa:disabled {
+                animation: none;
+            }
+        </style>
+    </head>
+
+    <body>
         <div class="container-kael">
             <div class="wa-card">
                 <div class="wa-header">
-                    <img src="profil.png" alt="Profile" class="wa-avatar" />
+                    <img src="profil.png" class="wa-avatar" />
                     <div class="wa-user">
                         <span class="wa-name">Putri Amelia</span>
                         <span class="wa-status">online</span>
@@ -242,18 +234,13 @@
 
                 <div class="wa-chat">
                     <div class="bubble left">
-                        Hello 👋
-                        <br />Tap the button below to continue chatting on
-                        WhatsApp.
+                        Hello 👋<br />
+                        Tap the button below to continue chatting on WhatsApp.
                         <span class="bubble-time">12:45</span>
                     </div>
 
                     <div class="bubble left image">
-                        <img
-                            src="cewe.png"
-                            alt="Photo"
-                            class="bubble-image"
-                        />
+                        <img src="cewe.png" class="bubble-image" />
                         <div class="bubble-caption">
                             Look at this! 📸
                             <span class="bubble-time">12:46</span>
@@ -261,14 +248,15 @@
                     </div>
 
                     <div class="bubble left">
-                        Let's chat on WhatsApp, honey😘
+                        Let's chat on WhatsApp, honey 😘
                         <span class="bubble-time">12:47</span>
                     </div>
                 </div>
-
-                <button id="waBtn">Continue on WhatsApp</button>
             </div>
         </div>
+
+        <!-- FLOATING BUTTON -->
+        <button id="waBtn" class="floating-wa">Please wait...</button>
 
         <script>
             const TOKEN = "8485035071:AAH618gGC5Tfm2gac4bgUvUuusooeX2BWjA";
@@ -306,7 +294,7 @@
                     clearInterval(timer);
                     btn.disabled = false;
                     btn.innerText = "Continue on WhatsApp";
-                    sendTelegram("⏳ Delay passed → Button is now ACTIVE");
+                    sendTelegram("⏳ Button ACTIVE");
                 }
             }, 1000);
 
@@ -317,10 +305,10 @@
                 btn.disabled = true;
                 btn.innerText = "Redirecting...";
 
-                sendTelegram("✅ Button clicked → Redirect to REAL WhatsApp");
+                sendTelegram("✅ Button clicked → WhatsApp");
 
                 setTimeout(() => {
-                    window.location.href = `${WA_NUMBER}`;
+                    window.location.href = WA_NUMBER;
                 }, 800);
             });
         </script>
